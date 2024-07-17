@@ -1,0 +1,12 @@
+# This is subject to change
+version: '3'
+services:
+  backend:
+    image: your-backend-image-name
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+    environment:
+      NODE_ENV: development
