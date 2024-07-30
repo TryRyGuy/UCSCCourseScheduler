@@ -14,7 +14,7 @@ This will serve as a manual for the dev team to host the project's server/backen
 
 - ### 1.4. Run the following command in your terminal to run the docker image
 
-'''docker run -p 5000:5000 backend:latest'''
+'''docker run -p 5000:5000 ucsc-sched-srvc-backend'''
 
 - ### 1.5. For debugging, run the following command with the docker image id grabbed from the running instance found in the docker desktop application
 
