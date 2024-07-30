@@ -12,6 +12,12 @@ Currently, two official plugins are available:
 
 ## Hosting Frontend
 
+### Before doing anything, you must install Vite and Tailwind CSS. To do so, run the following command:
+
+-> npm install vite --save-dev
+
 - ### 1.1. Running the frontend: To run the frontend, execute the following command and click the link generated
 
-'''npm run dev'''
+npm run dev
+
+
