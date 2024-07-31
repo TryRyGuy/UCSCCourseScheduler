@@ -10,7 +10,7 @@ const TopNavbar = () => {
   // Finish about page and handle routing
   // Finish page itsel
   return (
-    <nav className="bg-blue-500 text-white p-4 fixed w-full top-0 z-20 flex items-center justify-between">
+    <nav className="bg-topNavBlue text-white p-4 fixed w-full top-0 z-20 flex items-center justify-between">
       <div className="flex items-center cursor-pointer" onClick={handleLogoClick}>
         
         <img
@@ -26,7 +26,7 @@ const TopNavbar = () => {
         after:block 
         after:w-full 
         after:h-0.5 
-        after:bg-yellow-500 
+        after:bg-topNavYellow
         after:absolute 
         after:bottom-0 
         after:left-0 
@@ -41,7 +41,7 @@ const TopNavbar = () => {
         after:block 
         after:w-full 
         after:h-0.5 
-        after:bg-yellow-500 
+        after:bg-topNavYellow
         after:absolute 
         after:bottom-0 
         after:left-0 

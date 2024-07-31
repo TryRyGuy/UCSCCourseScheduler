@@ -4,6 +4,8 @@ import TopNavbar from './components/TopNavbar';
 import SideNavbar from './components/SideNavbar';
 import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import SettingsPage from './pages/Settings/SettingsPage';
+import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 import './index.css';
 
 const App = () => {
@@ -16,6 +18,8 @@ const App = () => {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
           </Routes>
         </main>
       </div>
