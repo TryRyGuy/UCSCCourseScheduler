@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 
 const scheduleSchema = new mongoose.Schema({
     classId: {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
     },
     scheduleName: {
         type: String,
-        required: true,
     },
 }, { collection: 'UCSC Schedules' });
 
