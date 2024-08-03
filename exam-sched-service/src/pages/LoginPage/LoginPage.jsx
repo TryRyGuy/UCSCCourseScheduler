@@ -30,7 +30,7 @@ const LoginPage = () => {
         <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
           <button
             onClick={toggleActive}
-            className="pointer-events-auto w-12 h-12 bg-topNavBlue rounded-full flex justify-center items-center text-white text-xl hover:bg-blue-600 transition-colors duration-300 z-10"
+            className="pointer-events-auto w-12 h-12 bg-topNavBlue rounded-full flex justify-center items-center text-white text-xl hover:bg-blue-600 hover:border-2 hover:border-white transition-colors duration-300 z-10"
           >
             <span className={`transform transition-transform duration-300 ${isLoginActive ? 'rotate-0' : 'rotate-180'}`}>&#x25B6;</span>
           </button>
