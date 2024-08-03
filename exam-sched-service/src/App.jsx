@@ -6,6 +6,9 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SettingsPage from './pages/Settings/SettingsPage';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
+import BrowsePage from './pages/BrowseClasses/BrowsePage.jsx';
+import AboutPage from './pages/About/AboutPage.jsx';
+import UsagePage from './pages/Usage/UsagePage.jsx';
 import './index.css';
 
 const App = () => {
@@ -20,6 +23,9 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/browse-classes" element={<BrowsePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/usage" element={<UsagePage />} />
           </Routes>
         </main>
       </div>

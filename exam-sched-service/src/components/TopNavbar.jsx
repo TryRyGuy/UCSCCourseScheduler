@@ -35,7 +35,7 @@ const TopNavbar = () => {
         after:transition-transform 
         after:duration-300
         hover:text-white">Home</Link>
-        <Link to="/" className="text-white 
+        <Link to="/about" className="text-white 
         relative 
         after:content-[''] 
         after:block 
