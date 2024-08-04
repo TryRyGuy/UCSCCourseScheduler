@@ -6,7 +6,7 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import LoginPage from './pages/LoginPage/LoginPage';
 import SettingsPage from './pages/Settings/SettingsPage';
 import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
-import BrowsePage from './pages/BrowseClasses/BrowsePage.jsx';
+import BrowsePage from './pages/BrowsePage/BrowsePage';
 import AboutPage from './pages/About/AboutPage.jsx';
 import UsagePage from './pages/Usage/UsagePage.jsx';
 import './index.css';
