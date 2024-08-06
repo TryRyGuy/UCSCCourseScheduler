@@ -20,7 +20,7 @@ const App = () => {
         <main className="flex-1 pt-20 flex items-center justify-center">
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signin" element={<LoginPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/browse-classes" element={<BrowsePage />} />

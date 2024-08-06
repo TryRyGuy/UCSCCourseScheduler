@@ -28,13 +28,14 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     try {
-        const userExists = await User.findone({ email: email, password: password });
-        if (!userExists) {
-            return res.status(400).json({ message: 'User does not exists' });
+        const user = await User.findOne({ email:email, password:password });
+        if (!user) {
+            return res.status(400).json({ message: 'User does not exist' });
         }
-        res.status(200).send('User logged in');
+        // Set user session or JWT token here
+        res.status(200).json({ message: 'User logged in', user });
     } catch (error) {
-        res.status(400).send(error.message);
+        res.status(400).json({ message: error.message });
     }
 });
 

@@ -3,10 +3,40 @@ import loginBackground from '/images/LoginBackground.png'; // Update the path as
 
 const LoginPage = () => {
   const [isLoginActive, setIsLoginActive] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const toggleActive = () => {
     setIsLoginActive(!isLoginActive);
     document.activeElement.blur();
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.message);
+      } else {
+        const data = await response.json();
+        // Handle successful login (e.g., store session info, redirect user)
+        console.log('Login successful', data);
+      }
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
+  };
+
+  const handleSignUp = async () => {
+    // Implement sign-up functionality similarly if needed
   };
 
   return (
@@ -39,23 +69,52 @@ const LoginPage = () => {
         {/* Login Form */}
         <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-100' : 'opacity-0'}`}>
           <h2 className="text-4xl font-semibold mb-4 text-white">Login</h2>
-          <input type="email" placeholder="Email" className="w-3/4 p-2 mb-4 border border-gray-300 rounded" />
-          <input type="password" placeholder="Password" className="w-3/4 p-2 mb-4 border border-gray-300 rounded" />
-          <button className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300">Proceed</button>
+          <input 
+            type="email" 
+            placeholder="Email" 
+            className="w-3/4 p-2 mb-4 border border-gray-300 rounded" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            className="w-3/4 p-2 mb-4 border border-gray-300 rounded" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {error && <p className="text-red-500">{error}</p>}
+          <button 
+            onClick={handleLogin}
+            className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300"
+          >
+            Proceed
+          </button>
         </div>
 
         {/* Sign-Up Form */}
         <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-0' : 'opacity-100'}`} style={{ left: '50%' }}>
           <h2 className="text-4xl font-semibold mb-4 text-white">Account Registration</h2>
-          <input type="email" placeholder="Email" className="w-3/4 p-2 mb-4 border border-gray-300 rounded" />
-          <input type="password" placeholder="Password" className="w-3/4 p-2 mb-4 border border-gray-300 rounded" />
+          <input 
+            type="email" 
+            placeholder="Email" 
+            className="w-3/4 p-2 mb-4 border border-gray-300 rounded" 
+          />
+          <input 
+            type="password" 
+            placeholder="Password" 
+            className="w-3/4 p-2 mb-4 border border-gray-300 rounded" 
+          />
           <p className="text-xs text-white text-center mt-2 mb-4">
             By creating an account above, I hereby agree to IMPG’s terms and services along with anything else covered in the <a href="https://example.com/privacy-policy" className="underline">Privacy Policy and Data Transparency Agreement</a>.
           </p>
-          <button className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300">Create Account</button>
+          <button 
+            onClick={handleSignUp}
+            className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300"
+          >
+            Create Account
+          </button>
         </div>
-
-        
       </div>
     </div>
   );

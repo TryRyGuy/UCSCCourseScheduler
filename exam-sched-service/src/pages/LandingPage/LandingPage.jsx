@@ -11,7 +11,7 @@ const LandingPage = () => {
           Your gateway to a well planned learning experience.
         </p>
         <div className="space-y-4 sm:space-y-0 sm:space-x-6 flex flex-col sm:flex-row justify-center items-center">
-          <Link to="/login">
+          <Link to="/signin">
             <button className="px-8 py-3 bg-blue-600 text-white text-lg font-medium rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">
               Log In
             </button>

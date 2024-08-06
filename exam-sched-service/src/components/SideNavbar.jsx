@@ -40,7 +40,7 @@ const SideNavbar = () => {
             Settings
           </span>
         </Link>
-        <Link to="/login" className="text-black p-1 hover:bg-customBlue w-full text-left flex items-center">
+        <Link to="/signin" className="text-black p-1 hover:bg-customBlue w-full text-left flex items-center">
           <FontAwesomeIcon icon={faUserCircle} size="2x" className="mr-3" />
           <span className={`transition-opacity duration-300 ${isHovered ? 'opacity-100 delay-200' : 'opacity-0 delay-0'} ml-2 whitespace-nowrap`}>
             Log in/Sign up

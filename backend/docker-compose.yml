@@ -1,12 +1,25 @@
-# This is subject to change
-version: '3'
+version: '3.8'  # Using the latest version
+
 services:
   backend:
-    image: your-backend-image-name
-    build: .
+    build:
+      context: .
+      
+    image: ucsc-sched-srvc-backend:latest
     ports:
-      - "3000:3000"
+      - "5000:5000"  # Change this to match your Dockerfile EXPOSE
     volumes:
       - .:/usr/src/app
-    environment:
-      NODE_ENV: development
+      - /usr/src/app/node_modules  # Ensure node_modules are not overwritten
+    env_file:
+      - .env # Load environment variables from .env file
+
+  frontend:
+    build:
+      context: ../exam-sched-service
+      
+    image: ucsc-sched-srvc-frontend:latest
+    ports:
+      - "3000:80"  # Assuming your frontend serves on port 80 in the container
+    env_file:
+      - .env # Load environment variables from .env file
