@@ -24,6 +24,9 @@ This command will outline anything going awry with the docker hosting service. T
 
 docker-compose down --volumes
 docker system prune --all --volumes --force
+
+NOTE: Any packages installed with npm install must have the entire container rebuilt before running or errors will ensue
+
 ---
 
 ## Important Tips
