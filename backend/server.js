@@ -51,9 +51,7 @@ app.use((err, req, res, next) => {
 
 // Simple route to send CSRF token to the client
 app.get('/api/csrf-token', (req, res) => {
-    console.log(req.csrfToken());
     const csrfToken = req.csrfToken();
-    console.log(csrfToken);
     res.cookie('XSRF-TOKEN', csrfToken, { httpOnly: false });
     res.status(200).json({ csrfToken });
 });

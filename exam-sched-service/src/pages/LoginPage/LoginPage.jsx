@@ -14,7 +14,6 @@ const LoginPage = () => {
     const fetchCsrfToken = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/csrf-token', { withCredentials: true });
-        console.log('Fetched CSRF Token:', response.data.csrfToken);
         setCsurfToken(response.data.csrfToken);
       } catch (error) {
         console.error('Error fetching CSRF token:', error);
@@ -24,10 +23,10 @@ const LoginPage = () => {
     fetchCsrfToken();
   }, []);
 
-  // Log CSRF token updates
+  /*// Log CSRF token updates
   useEffect(() => {
     console.log('Updated CSRF Token:', csurfToken);
-  }, [csurfToken]);
+  }, [csurfToken]);*/
 
 
   const toggleActive = () => {
@@ -36,7 +35,6 @@ const LoginPage = () => {
   };
 
   const handleLogin = async () => {
-    console.log( csurfToken);
     try {
       const response = await axios.post(
         'http://localhost:5000/api/users/login',

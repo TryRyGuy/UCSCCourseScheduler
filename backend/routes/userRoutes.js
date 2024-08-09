@@ -29,15 +29,14 @@ router.post('/register', async (req, res) => {
     }
 });
 
+// CHECK FOR SESSION STORAGE IN DATABASE
 // Login user
 router.post('/login', async (req, res) => {
-    console.log("start");
     const { email, password } = req.body; // _csrf is implicitly checked by csurf middleware
-    console.log("extracted email and password")
     try {
         const user = await User.findOne({ email, password });
         if (!user) {
-            return res.status(400).json({ message: 'User does not exist' });
+            return res.status(400).json({ message: 'Incorrect email and/or password' });
         }
         console.log("user found");
         req.session.regenerate((err) => {
