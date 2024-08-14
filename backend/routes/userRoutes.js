@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email, password });
         if (!user) {
-            return res.status(400).json({ message: 'Incorrect email and/or password' });
+            return res.status(401).json({ message: 'Incorrect email and/or password' });
         }
         console.log("user found");
         req.session.regenerate((err) => {
@@ -54,6 +54,17 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
+});
+
+// Logout route
+router.post('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ message: 'Logout failed' });
+        }
+        res.clearCookie('connect.sid'); // Clear the session cookie
+        res.status(200).json({ message: 'Logged out successfully' });
+    });
 });
 
 // Get all users

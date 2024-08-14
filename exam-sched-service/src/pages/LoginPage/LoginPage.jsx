@@ -1,34 +1,18 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import loginBackground from '/images/LoginBackground.png';
 import axios from 'axios'; // Make sure axios is installed and imported
+import { useSession } from '../../components/SessionContext.jsx';
 
 const LoginPage = () => {
   const [isLoginActive, setIsLoginActive] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [csurfToken, setCsurfToken] = useState('');
+  
+   // Get the CSRF token and user-related functions from the SessionContext
+  const { csrfToken, setUser } = useSession();
 
-  // Fetch CSRF token on component mount
-  useEffect(() => {
-    const fetchCsrfToken = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/csrf-token', { withCredentials: true });
-        setCsurfToken(response.data.csrfToken);
-      } catch (error) {
-        console.error('Error fetching CSRF token:', error);
-      }
-    };
-
-    fetchCsrfToken();
-  }, []);
-
-  /*// Log CSRF token updates
-  useEffect(() => {
-    console.log('Updated CSRF Token:', csurfToken);
-  }, [csurfToken]);*/
-
-
+  // Swaps between Login versus Sign Up side of the form
   const toggleActive = () => {
     setIsLoginActive(!isLoginActive);
     document.activeElement.blur();
@@ -42,7 +26,7 @@ const LoginPage = () => {
         {
           withCredentials: true,
           headers: {
-            'X-CSRF-TOKEN': csurfToken // Include the CSRF token in the header
+            'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the header
           }
         }
       );
@@ -54,6 +38,8 @@ const LoginPage = () => {
       setMessage(error.response.data.message);
     }
   };
+
+  
 
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 pl-16">

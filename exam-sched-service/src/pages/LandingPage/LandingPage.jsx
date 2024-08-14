@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useContext  } from 'react';
 import { Link } from 'react-router-dom';
+import { useSession } from '../../components/SessionContext.jsx';
 
 const LandingPage = () => {
+  const { user, loading } = useSession(); // Get user and loading states from context
+
+  // Don't render the component until the session check is complete
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12">
       <div className="text-center max-w-2xl">
@@ -11,11 +19,14 @@ const LandingPage = () => {
           Your gateway to a well planned learning experience.
         </p>
         <div className="space-y-4 sm:space-y-0 sm:space-x-6 flex flex-col sm:flex-row justify-center items-center">
-          <Link to="/signin">
-            <button className="px-8 py-3 bg-blue-600 text-white text-lg font-medium rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">
-              Log In
-            </button>
-          </Link>
+          {/* Only show the Log In button if the user is NOT logged in */}
+          {!user && (
+            <Link to="/signin">
+              <button className="px-8 py-3 bg-blue-600 text-white text-lg font-medium rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105">
+                Log In
+              </button>
+            </Link>
+          )}
           <Link to="/browse-classes">
             <button className="px-8 py-3 bg-topNavYellow text-white text-lg font-medium rounded-full shadow-lg hover:bg-yellow-500 transition-all duration-300 transform hover:scale-105">
               Browse Classes

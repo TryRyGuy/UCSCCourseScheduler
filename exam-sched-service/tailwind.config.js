@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         topNavBlue: '#01589D',
+        hoverLogout: '#3363E6',
         topNavYellow: '#F1AF13',
         LogButtonBlue: '#162DA3',
         sideNavGrey1: "#D2C4AE",
