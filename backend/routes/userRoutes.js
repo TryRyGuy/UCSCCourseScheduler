@@ -12,17 +12,23 @@ router.get('/csrf-token', (req, res) => {
 router.post('/register', async (req, res) => {
     const { scheduleId = [], email, password, classId = [], scheduleName = ''} = req.body;
     try {
-        const userExists = await User.findOne({ email: email });
+        if (!email.endsWith('@ucsc.edu')) {
+            return res.status(400).json({ message: 'Invalid email. Please use an UCSC email address.' });
+        }
+        const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
+
         const user = new User({ scheduleId, email, password });
+        schedules = []
         for (let i = 0; i < 4; i++) {
-            const sched = new Schedule({ classId, scheduleName});
+            const sched = new Schedule({ classId, scheduleName });
             const savedSched = await sched.save();
-            user.scheduleId.push(savedSched._id);
-            await user.save();
+            schedules.push(savedSched._id);
         }
+        user.scheduleId = schedules;
+        await user.save();
         res.status(201).send('User registered');
     } catch (error) {
         res.status(400).send(error.message);
