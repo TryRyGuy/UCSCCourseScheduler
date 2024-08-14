@@ -68,7 +68,7 @@ const LoginPage = () => {
       );
       if (response.status === 201) {
         // BE careful of this line!
-        setUser(response.data.user);  // Set the user in session context
+        //setUser(response.data.user);  // Set the user in session context
         window.location.href = '/';
       }
     } catch (error) {

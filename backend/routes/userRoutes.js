@@ -13,12 +13,15 @@ router.post('/register', async (req, res) => {
     const { scheduleId = [], email, password, classId = [], scheduleName = ''} = req.body;
     try {
         if (!email.endsWith('@ucsc.edu')) {
-            return res.status(400).json({ message: 'Invalid email. Please use an UCSC email address.' });
+            return res.status(400).json({ message: 'Invalid email. Please use a valid UCSC email address.' });
         }
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
+        
+        // Hash the password before saving
+        //const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = new User({ scheduleId, email, password });
         schedules = []
@@ -29,13 +32,31 @@ router.post('/register', async (req, res) => {
         }
         user.scheduleId = schedules;
         await user.save();
-        res.status(201).send('User registered');
+        console.log("user created");
+
+        // Session regeneration
+        req.session.regenerate((err) => {
+            if (err) {
+                return res.status(500).json({ message: 'Session regeneration failed' });
+            }
+            req.session.user = user; // Store user data in session
+            req.session.save((err) => {
+                if (err) {
+                    return res.status(500).json({ message: 'Session save failed' });
+                }
+                res.status(201).send({message: 'User registered', user: { id: user._id, email: user.email } });
+            });
+        });
+        
     } catch (error) {
-        res.status(400).send(error.message);
+        console.error('Registration error:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
-// CHECK FOR SESSION STORAGE IN DATABASE
+//NOTE: EXPLORE STORING USER ID IN SESSION RATHER THAN USER OBJECT ITSELF
+// MORE SPACE EFFICIENT AND NOT RISKING EXPOSING PASSWORDS TO Javascript ATTACKS (XSS)
+
 // Login user
 router.post('/login', async (req, res) => {
     const { email, password } = req.body; // _csrf is implicitly checked by csurf middleware
