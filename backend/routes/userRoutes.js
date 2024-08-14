@@ -16,6 +16,8 @@ router.post('/register', async (req, res) => {
         if (userExists) {
             return res.status(400).json({ message: 'User already exists' });
         }
+
+        
         const user = new User({ scheduleId, email, password });
         for (let i = 0; i < 4; i++) {
             const sched = new Schedule({ classId, scheduleName});
