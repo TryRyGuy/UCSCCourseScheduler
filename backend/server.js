@@ -6,6 +6,10 @@ const session = require('express-session');  // Import express-session
 const MongoStore = require('connect-mongo');
 const csurf = require('csurf');
 const cookieParser = require('cookie-parser');
+// const https = require('https');
+// const fs = require('fs');
+// const path = require('path');
+const rateLimit = require('express-rate-limit');
 
 dotenv.config();
 
@@ -21,6 +25,17 @@ app.use(cors({
     methods: ['GET', 'POST'],
     credentials: true
 }));
+
+const registerLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 1 hour
+    max: 100, // Limit each IP to 5 registration attempts per hour
+    message: 'Too many registration attempts from this IP, please try again after 15 minutes'
+});
+
+// Export the registerLimiter
+module.exports = {
+    registerLimiter,
+};
 
 // Configure session middleware
 app.use(session({
@@ -89,3 +104,4 @@ mongoose.connect(process.env.MONGO_URI, {
         console.log(`Server is running on port ${PORT}`);
     });
 }).catch(err => console.error(err));
+

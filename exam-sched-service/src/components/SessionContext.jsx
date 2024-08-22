@@ -37,8 +37,9 @@ export const SessionProvider = ({ children }) => {
             }
         };
 
-        fetchSession();
+        
         fetchCsrfToken();
+        fetchSession();
     }, []);
 
     return (
