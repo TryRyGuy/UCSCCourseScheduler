@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const Schedule = require('../models/schedule');
-const Class = require('../models/classInfo');
+const ClassInfo = require('../models/classInfo');
 
 router.get('/addClasses', async (req, res) => {
     const { classId, scheduleId } = req.body;
@@ -37,11 +37,16 @@ router.get('/addClasses', async (req, res) => {
 });
 
 // Get all classes
-router.get('/getClasses', async (req, res) => {
+router.get('/fetchClasses', async (req, res) => {
+    const { term } = req.query; // Extracting the term from query parameters
+    console.log(term);
     try {
-        const classes = await Class.find();
-        res.json(classes);
+        const classes = await ClassInfo.find({ quarter: term });
+        console.log(classes);
+        res.status(200).json(classes);
     } catch (error) {
-        res.status(500).send(error.message);
+        res.status(500).json({ message: 'Error fetching courses', error });
     }
 });
+
+module.exports = router;

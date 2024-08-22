@@ -81,8 +81,11 @@ app.get('/', (req, res) => {
 
 // Define/integrate user Routes for use
 const userRoutes = require('./routes/userRoutes');
-
 app.use('/api/users', userRoutes);
+
+// Define/integrate course Routes for use
+const classRoutes = require('./routes/classRoutes');
+app.use('/api/classes', classRoutes);
 
 // Session route to check if the user is logged in
 app.get('/api/session', (req, res) => {
