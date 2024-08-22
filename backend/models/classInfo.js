@@ -17,6 +17,9 @@ const classInfoSchema = new mongoose.Schema({
     instructor: {
         type: String,
     },
+    quarter: {
+        type: String,
+    },
 }, { collection: 'UCSC Class Info' });
 
 module.exports = mongoose.model('ClassInfo', classInfoSchema);

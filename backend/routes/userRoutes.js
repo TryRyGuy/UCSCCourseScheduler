@@ -11,7 +11,7 @@ const { registerLimiter } = require('../server'); // Adjust the path as necessar
 
 // Register user
 router.post('/register', async (req, res) => {
-    const { scheduleId = [], email, password, classId = [], scheduleName = ''} = req.body;
+    const { scheduleId = [], email, password, classes = [], scheduleName = '' } = req.body;
     try {
         if (!email.endsWith('@ucsc.edu')) {
             return res.status(400).json({ message: 'Invalid email. Please use a valid UCSC email address.' });
@@ -27,7 +27,7 @@ router.post('/register', async (req, res) => {
         const user = new User({ email, password });
         schedules = []
         for (let i = 0; i < 4; i++) {
-            const sched = new Schedule({ classId, scheduleName });
+            const sched = new Schedule({ classes, scheduleName });
             const savedSched = await sched.save();
             schedules.push(savedSched._id);
         }
@@ -97,7 +97,7 @@ router.post('/logout', (req, res) => {
 });
 
 // Get all users
-router.get('/', async (req, res) => {
+router.get('/getUsers', async (req, res) => {
     try {
         const users = await User.find();
         res.json(users);

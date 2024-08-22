@@ -1,9 +1,17 @@
 const mongoose = require('mongoose');
 
 const scheduleSchema = new mongoose.Schema({
-    classId: {
-        type: [mongoose.Schema.Types.ObjectId],
-    },
+    classes: [
+        {
+            classId: {
+                type: mongoose.Schema.Types.ObjectId,
+            },
+            isUsed: {
+                type: Boolean,
+                default: false,
+            }
+        }
+    ],
     scheduleName: {
         type: String,
     },
