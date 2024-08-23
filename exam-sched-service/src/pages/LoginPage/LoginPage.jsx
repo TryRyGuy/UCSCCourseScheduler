@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import loginBackground from '/images/LoginBackground.png';
 import axios from 'axios'; // Make sure axios is installed and imported
 import { useSession } from '../../components/SessionContext.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const LoginPage = () => {
   const [isLoginActive, setIsLoginActive] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
+  const [message2, setMessage2] = useState('');
   
    // Get the CSRF token and user-related functions from the SessionContext
   const { csrfToken, setUser } = useSession();
@@ -16,6 +20,11 @@ const LoginPage = () => {
   const toggleActive = () => {
     setIsLoginActive(!isLoginActive);
     document.activeElement.blur();
+  };
+
+  // Toggles user's ability to see their entered password
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleLogin = async () => {
@@ -39,7 +48,33 @@ const LoginPage = () => {
     }
   };
 
-  
+  const handleSignUp = async () => {
+    // Check if email ends with @ucsc.edu
+    if (!email.endsWith('@ucsc.edu')) {
+      setMessage2('Invalid Email: please enter a valid UCSC email and try again');
+      return; // Exit early without making the API request
+    }
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/users/register',
+        { email, password },
+        {
+          withCredentials: true,
+          headers: {
+            'X-CSRF-TOKEN': csrfToken
+          }
+        }
+      );
+      if (response.status === 201) {
+        // BE careful of this line!
+        //setUser(response.data.user);  // Set the user in session context
+        window.location.href = '/';
+      }
+    } catch (error) {
+      setMessage2(error.response.data.message);
+    }
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen pt-16 pl-16">
@@ -77,31 +112,65 @@ const LoginPage = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-3/4 p-2 mb-4 border border-gray-300 rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative w-3/4 mb-4">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </span>
+          </div>
           <button
             className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300"
             onClick={handleLogin}
           >
             Proceed
           </button>
-          {message && <p className="text-red-500 mt-4">{message}</p>}
+          {message && <p className="text-red-500 mt-4 text-center flex items-center justify-center">{message}</p>}
         </div>
 
         {/* Sign-Up Form */}
         <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-0' : 'opacity-100'}`} style={{ left: '50%' }}>
           <h2 className="text-4xl font-semibold mb-4 text-white">Account Registration</h2>
-          <input type="email" placeholder="Email" className="w-3/4 p-2 mb-4 border border-gray-300 rounded" />
-          <input type="password" placeholder="Password" className="w-3/4 p-2 mb-4 border border-gray-300 rounded" />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-3/4 p-2 mb-4 border border-gray-300 rounded"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div className="relative w-3/4 mb-4">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              className="w-full p-2 border border-gray-300 rounded"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </span>
+          </div>
           <p className="text-xs text-white text-center mt-2 mb-4">
             By creating an account above, I hereby agree to IMPG’s terms and services along with anything else covered in the <a href="https://example.com/privacy-policy" className="underline">Privacy Policy and Data Transparency Agreement</a>.
           </p>
-          <button className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300">Create Account</button>
+          <button
+            className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300"
+            onClick={handleSignUp}
+          >
+            Create Account
+          </button>
+          {message2 && <p className="text-red-500 mt-4 text-center flex items-center justify-center">{message2}</p>}
         </div>
       </div>
     </div>

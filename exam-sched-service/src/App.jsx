@@ -9,6 +9,7 @@ import CheckoutPage from './pages/CheckoutPage/CheckoutPage';
 import BrowsePage from './pages/BrowsePage/BrowsePage';
 import AboutPage from './pages/About/AboutPage.jsx';
 import UsagePage from './pages/Usage/UsagePage.jsx';
+import TwoFVerifyPage from './pages/LoginPage/2FVerifyPage.jsx';
 import './index.css';
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
             <Route path="/browse-classes" element={<BrowsePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/usage" element={<UsagePage />} />
+            <Route path="/2f-verify" element={<TwoFVerifyPage />} />
           </Routes>
         </main>
       </div>
