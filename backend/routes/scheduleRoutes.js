@@ -52,6 +52,13 @@ router.post('/addClass', async (req, res) => {
         if (!schedule) {
             return res.status(404).json({ message: 'Schedule not found' });
         }
+
+        // Check if the class already exists in the schedule
+        const classExists = schedule.classes.some((entry) => entry.classId === classId);
+        if (classExists) {
+            return res.status(400).json({ message: 'Class is already in the schedule for the selected term.' });
+        }
+
         // Check if the schedule already has 15 classes
         if (schedule.classes.length >= 15) {
             return res.status(400).json({ message: 'Schedule is full. Cannot add more classes. Please empty some of your cart and try again' });

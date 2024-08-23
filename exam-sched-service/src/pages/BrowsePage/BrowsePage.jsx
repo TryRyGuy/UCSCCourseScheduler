@@ -8,18 +8,25 @@ const BrowsePage = () => {
     const [term, setTerm] = useState('Fall');
     const [term2, setTerm2] = useState('Fall');
     const [classes, setClasses] = useState([]);
-
-    const { user, setUser, csrfToken, schedules, setSchedules, classCounts, setClassCounts } = useSession();
+    const [localLoading, setLocalLoading] = useState(true); // Add loading state
+    const [message, setMessage] = useState('e'); // State to hold error/success messages
+    const [messageType, setMessageType] = useState('success'); // State to hold the type of the message
+    const [timeoutId, setTimeoutId] = useState(null); // State to store the timeout ID
+    const [messageVisible, setMessageVisible] = useState(false); // State to control the message visibility 
+    const { user, csrfToken, schedules, setSchedules, loading, setClassCounts } = useSession();
 
     const fetchClasses = async () => {
+      setLocalLoading(true);
         try {
             const response = await axios.get('/api/classes/fetchClasses', { params: { term } });
             setClasses(response.data);
         } catch (error) {
             console.error('Error fetching classes:', error);
         }
+        setLocalLoading(false);
     };
 
+    //Can also have "term" placed in [] to run fetch on change
     useEffect(() => {
         fetchClasses();
     }, []);
@@ -29,41 +36,66 @@ const BrowsePage = () => {
         navigate('/signin'); // Redirect to login page if not logged in
       } else {
         try {
-            const response = await axios.post(
-                '/api/schedules/addClass',
-                { classId, term: term.toLowerCase() },
-                {
-                    withCredentials: true,
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the header
-                    }
-                }
-            );
-            console.log('Class added:', response.data);
-            // Optionally update state to reflect changes
+          const response = await axios.post(
+              '/api/schedules/addClass',
+              { classId, term: term.toLowerCase() },
+              {
+                  withCredentials: true,
+                  headers: {
+                      'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the header
+                  }
+              }
+          );
+          setMessage(response.data.message);
+          setMessageType('success');
+          setMessageVisible(true); // Show message
 
-            // Update local states after successful addition
-            const updatedSchedule = response.data.schedule;
-            const termIndex = { fall: 0, winter: 1, spring: 2, summer: 3 }[term.toLowerCase()];
+          // Optionally update state to reflect changes
 
-            // Update schedules state
-            setSchedules((prevSchedules) => {
-              const newSchedules = { ...prevSchedules };
-              newSchedules[term] = updatedSchedule;
-              return newSchedules;
-            });
+          // Update local states after successful addition
+          const updatedSchedule = response.data.schedule;
+          const termIndex = { fall: 0, winter: 1, spring: 2, summer: 3 }[term.toLowerCase()];
 
-            // Update classCounts state
-            setClassCounts((prevClassCounts) => {
-              const newClassCounts = { ...prevClassCounts };
-              newClassCounts[term] = newClassCounts[term] + 1;
-              return newClassCounts;
-            });
+          // Update schedules state
+          setSchedules((prevSchedules) => {
+            const newSchedules = { ...prevSchedules };
+            newSchedules[term] = updatedSchedule;
+            return newSchedules;
+          });
+
+          // Update classCounts state
+          setClassCounts((prevClassCounts) => {
+            const newClassCounts = { ...prevClassCounts };
+            newClassCounts[term] = newClassCounts[term] + 1;
+            return newClassCounts;
+          });
         } catch (error) {
-            console.error('Error adding class:', error);
+          if (error.response) {
+            setMessage(error.response.data.message);
+            setMessageType('error');
+          } else {
+            setMessage('Error adding class.');
+            setMessageType('error');
+          }
+          setMessageVisible(true); // Show message
         }
+        
+        // Set a timeout to clear the message after 4-5 seconds
+        // Clear any existing timeout
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+      }
+
+      // Set a new timeout to clear the message after 4-5 seconds
+      const newTimeoutId = setTimeout(() => {
+        setMessageVisible(false); // Start fade-out effect
+    }, 4000);
+      
+      setTimeoutId(newTimeoutId); // Store the new timeout ID
       }
     };
+
+// RETURNED CONTENT BEGINS BEYOND HERE ----------------------------------------------------------------------------
 
     return (
       <div className="min-h-screen w-full flex flex-col items-center p-16 bg-gray-100">
@@ -116,9 +148,23 @@ const BrowsePage = () => {
             </div>
         </div>
 
+        {/* Display Message */}
+        {message && (
+            <div 
+              className={`text-center mb-4 ${messageType === 'error' ? 'text-red-500' : 'text-blue-500'} font-semibold`}
+              style={{ 
+                transition: 'opacity 0.5s ease-out', 
+                opacity: messageVisible ? 1 : 0 
+              }}
+            >
+              {message}
+            </div>
+          )}
+
         {/* Carousel Container */}
         <div className="w-full max-w-full lg:max-w-[80%] xl:max-w-[75%] 2xl:max-w-[60%] mt-6">
-            {classes.length > 0 ? (
+          {!localLoading ? (
+            classes.length > 0 ? (
                 <div className="flex flex-col space-y-4">
                     {classes.map((course) => (
                         <div 
@@ -151,8 +197,11 @@ const BrowsePage = () => {
                     ))}
                 </div>
             ) : (
-                <div className="text-center text-gray-500">No classes found for the selected term.</div>
-            )}
+              <div className="text-center text-gray-500">No classes found for the selected term.</div>
+            )
+          ) : (
+              <div className="text-center text-gray-500">Loading...</div>
+          )}
         </div>
       </div>
     );
