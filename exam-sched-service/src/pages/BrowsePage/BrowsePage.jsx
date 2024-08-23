@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useSession } from '../../components/SessionContext.jsx';
+
 
 const BrowsePage = () => {
     const [term, setTerm] = useState('Fall');
     const [term2, setTerm2] = useState('Fall');
     const [classes, setClasses] = useState([]);
+
+    const { user, setUser, csrfToken, schedules, setSchedules, classCounts, setClassCounts } = useSession();
 
     const fetchClasses = async () => {
         try {
@@ -18,6 +23,47 @@ const BrowsePage = () => {
     useEffect(() => {
         fetchClasses();
     }, []);
+
+    const handleAddClass = async (classId) => {
+      if (!user) {
+        navigate('/signin'); // Redirect to login page if not logged in
+      } else {
+        try {
+            const response = await axios.post(
+                '/api/schedules/addClass',
+                { classId, term: term.toLowerCase() },
+                {
+                    withCredentials: true,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken // Include the CSRF token in the header
+                    }
+                }
+            );
+            console.log('Class added:', response.data);
+            // Optionally update state to reflect changes
+
+            // Update local states after successful addition
+            const updatedSchedule = response.data.schedule;
+            const termIndex = { fall: 0, winter: 1, spring: 2, summer: 3 }[term.toLowerCase()];
+
+            // Update schedules state
+            setSchedules((prevSchedules) => {
+              const newSchedules = { ...prevSchedules };
+              newSchedules[term] = updatedSchedule;
+              return newSchedules;
+            });
+
+            // Update classCounts state
+            setClassCounts((prevClassCounts) => {
+              const newClassCounts = { ...prevClassCounts };
+              newClassCounts[term] = newClassCounts[term] + 1;
+              return newClassCounts;
+            });
+        } catch (error) {
+            console.error('Error adding class:', error);
+        }
+      }
+    };
 
     return (
       <div className="min-h-screen w-full flex flex-col items-center p-16 bg-gray-100">
@@ -95,8 +141,11 @@ const BrowsePage = () => {
                             </div>
 
                             {/* Add to Schedule Button */}
-                            <button className="bg-blue-500 text-white rounded-full p-2 mt-2 sm:mt-0 sm:ml-4">
-                                <span className="font-bold">+</span>
+                            <button 
+                              onClick={() => handleAddClass(course._id)}
+                              className="bg-blue-500 text-white rounded-full p-2 mt-2 sm:mt-0 sm:ml-4"
+                            >
+                              <span className="font-bold">+</span>
                             </button>
                         </div>
                     ))}

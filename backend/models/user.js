@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
     scheduleId: {
         type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Schedule',
     },
     email: {
         type: String,

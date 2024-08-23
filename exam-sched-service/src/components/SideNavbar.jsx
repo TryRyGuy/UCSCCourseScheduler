@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const SideNavbar = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const { user, setUser, csrfToken } = useSession();
+  const { user, setUser, csrfToken, schedules, classCounts } = useSession();
   const navigate = useNavigate();
 
   const handleLogout = async () => {

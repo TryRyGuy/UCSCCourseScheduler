@@ -4,7 +4,8 @@ const scheduleSchema = new mongoose.Schema({
     classes: [
         {
             classId: {
-                type: mongoose.Schema.Types.ObjectId,
+                type: [mongoose.Schema.Types.ObjectId],
+                ref: 'ClassInfo'
             },
             isUsed: {
                 type: Boolean,

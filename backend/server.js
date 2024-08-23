@@ -84,6 +84,10 @@ const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 
 // Define/integrate course Routes for use
+const scheduleRoutes = require('./routes/scheduleRoutes');
+app.use('/api/schedules', scheduleRoutes);
+
+// Define/integrate course Routes for use
 const classRoutes = require('./routes/classRoutes');
 app.use('/api/classes', classRoutes);
 
