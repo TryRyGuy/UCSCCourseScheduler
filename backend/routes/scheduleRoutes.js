@@ -53,10 +53,10 @@ router.post('/addClass', async (req, res) => {
             return res.status(404).json({ message: 'Schedule not found' });
         }
 
-        // Check if the class already exists in the schedule
-        const classExists = schedule.classes.some((entry) => entry.classId === classId);
-        if (classExists) {
-            return res.status(400).json({ message: 'Class is already in the schedule for the selected term.' });
+        // Check if the class is already in the schedule
+        const isDuplicate = schedule.classes.some((entry) => entry.classId.toString() === classId);
+        if (isDuplicate) {
+            return res.status(400).json({ message: 'Class already exists in the schedule' });
         }
 
         // Check if the schedule already has 15 classes

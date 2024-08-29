@@ -173,7 +173,7 @@ const BrowsePage = () => {
                         >
                             {/* Left side: Class Info */}
                             <div className="w-full sm:w-2/3">
-                                <div className="text-lg sm:text-xl font-bold">{course.classTag} - {course.className}</div>
+                                <div className="text-lg sm:text-xl font-bold">{course.classTag} - {course.sectionNumber} : {course.className}</div>
                                 <div className="text-sm text-gray-600">{course.instructor}</div>
                             </div>
 
