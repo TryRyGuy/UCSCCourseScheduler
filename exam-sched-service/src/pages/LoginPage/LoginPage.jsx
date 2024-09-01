@@ -14,7 +14,7 @@ const LoginPage = () => {
   const [message2, setMessage2] = useState('');
   
    // Get the CSRF token and user-related functions from the SessionContext
-  const { csrfToken, setUser } = useSession();
+  const { csrfToken, setUser, isTabletOrMobile } = useSession();
 
   // Swaps between Login versus Sign Up side of the form
   const toggleActive = () => {
@@ -76,8 +76,9 @@ const LoginPage = () => {
     }
   }
 
-  return (
-    <div className="flex flex-col items-center min-h-screen pt-16 pl-16">
+  if(!isTabletOrMobile){
+    return (
+      <div className="flex flex-col items-center min-h-screen pt-16">
       {/* Header Text */}
       <div className="text-center text-topNavBlue mt-10">
         <h1 className="text-6xl font-bold">UCSC Scheduling Tool</h1>
@@ -103,7 +104,7 @@ const LoginPage = () => {
         </div>
 
         {/* Login Form */}
-        <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-100 pointer-events-auto visible' : 'opacity-0 pointer-events-none invisible'}`}>
           <h2 className="text-4xl font-semibold mb-4 text-white">Login</h2>
           <input
             type="email"
@@ -111,6 +112,7 @@ const LoginPage = () => {
             className="w-3/4 p-2 mb-4 border border-gray-300 rounded"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={!isLoginActive}
           />
           <div className="relative w-3/4 mb-4">
             <input
@@ -119,17 +121,18 @@ const LoginPage = () => {
               className="w-full p-2 border border-gray-300 rounded"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={!isLoginActive}
             />
             <span
               className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-              onClick={togglePasswordVisibility}
+              onClick={isLoginActive ? togglePasswordVisibility : null}
             >
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </span>
           </div>
           <button
             className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300"
-            onClick={handleLogin}
+            onClick={isLoginActive ? handleLogin : null}
           >
             Proceed
           </button>
@@ -137,7 +140,7 @@ const LoginPage = () => {
         </div>
 
         {/* Sign-Up Form */}
-        <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-0' : 'opacity-100'}`} style={{ left: '50%' }}>
+        <div className={`absolute w-1/2 h-full flex flex-col justify-center items-center p-6 transition-opacity duration-500 ease-in-out ${isLoginActive ? 'opacity-0 pointer-events-none invisible' : 'opacity-100 pointer-events-auto visible'}`} style={{ left: '50%' }}>
           <h2 className="text-4xl font-semibold mb-4 text-white">Account Registration</h2>
           <input
             type="email"
@@ -145,6 +148,7 @@ const LoginPage = () => {
             className="w-3/4 p-2 mb-4 border border-gray-300 rounded"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={isLoginActive}
           />
           <div className="relative w-3/4 mb-4">
             <input
@@ -153,10 +157,11 @@ const LoginPage = () => {
               className="w-full p-2 border border-gray-300 rounded"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoginActive}
             />
             <span
               className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-              onClick={togglePasswordVisibility}
+              onClick={isLoginActive ? null : togglePasswordVisibility}
             >
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </span>
@@ -166,7 +171,7 @@ const LoginPage = () => {
           </p>
           <button
             className="w-2/4 p-2 mt-4 bg-LogButtonBlue text-white border-2 border-white rounded shadow-lg hover:bg-blue-600 transition-colors duration-300"
-            onClick={handleSignUp}
+            onClick={isLoginActive ? null : handleSignUp}
           >
             Create Account
           </button>
@@ -174,7 +179,116 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  );
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center min-h-screen p-6 bg-white">
+    {/* Header Text */}
+    <div className="text-center text-topNavBlue mb-4 w-full mt-20">
+      <h1 className="text-4xl font-bold text-blue-900">UCSC Scheduling Tool</h1>
+      <p className="text-lg mt-2 text-gray-700">Planning your courses and exams, made easy!</p>
+    </div>
+
+    {/* Toggle Buttons for Mobile */}
+    <div className="flex justify-center space-x-4 mb-4 w-full max-w-md">
+      <button
+        className={`flex-1 px-4 py-2 text-lg font-medium rounded-lg shadow-md transition ${
+          isLoginActive ? 'bg-blue-600 text-white' : 'bg-white text-blue-600 border border-blue-600'
+        }`}
+        onClick={() => setIsLoginActive(true)}
+        disabled={isLoginActive}
+      >
+        Login
+      </button>
+      <button
+        className={`flex-1 px-4 py-2 text-lg font-medium rounded-lg shadow-md transition ${
+          isLoginActive ? 'bg-white text-blue-600 border border-blue-600' : 'bg-blue-600 text-white'
+        }`}
+        onClick={() => setIsLoginActive(false)}
+        disabled={!isLoginActive}
+      >
+        Register
+      </button>
+    </div>
+
+    {/* Form Container */}
+    <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-lg border border-gray-200">
+      {isLoginActive ? (
+        <div>
+          {/* Login Form */}
+          <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">Login</h2>
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-2 mb-3 border border-gray-300 rounded focus:ring focus:ring-blue-300"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div className="relative w-full mb-3">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              className="w-full p-2 border border-gray-300 rounded focus:ring focus:ring-blue-300"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </span>
+          </div>
+          <button
+            className="w-full p-2 mt-3 bg-blue-600 text-white rounded shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+            onClick={handleLogin}
+          >
+            Proceed
+          </button>
+          {message && <p className="text-red-500 mt-4 text-center">{message}</p>}
+        </div>
+      ) : (
+        <div>
+          {/* Registration Form */}
+          <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">Register</h2>
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-2 mb-3 border border-gray-300 rounded focus:ring focus:ring-blue-300"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <div className="relative w-full mb-3">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              className="w-full p-2 border border-gray-300 rounded focus:ring focus:ring-blue-300"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <span
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
+              onClick={togglePasswordVisibility}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </span>
+          </div>
+          <p className="text-xs text-gray-600 text-center mb-4">
+            By creating an account, you agree to our <a href="https://example.com/privacy-policy" className="underline">Privacy Policy</a>.
+          </p>
+          <button
+            className="w-full p-2 mt-3 bg-blue-600 text-white rounded shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+            onClick={handleSignUp}
+          >
+            Create Account
+          </button>
+          {message2 && <p className="text-red-500 mt-4 text-center">{message2}</p>}
+        </div>
+      )}
+    </div>
+  </div>
+  )
 };
 
 export default LoginPage;

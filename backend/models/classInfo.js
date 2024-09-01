@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 
 const classInfoSchema = new mongoose.Schema({
+    dept: {
+        type: String,
+    },
     classTag: {
         type: String,
     },
