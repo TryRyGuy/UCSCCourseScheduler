@@ -7,29 +7,10 @@ import axios from 'axios';
 
 
 const TopNavbar = () => {
-  const { user, setUser, csrfToken, loading } = useSession();
+  const { user, setUser, csrfToken, loading, isMobile } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); // State to manage dropdown visibility
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(window.innerWidth < 768);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768 && !isMobileView) {
-        setIsMobileView(true);
-        setIsDropdownOpen(false);
-        setIsMenuOpen(false);
-      } else if (window.innerWidth >= 768 && isMobileView) {
-        setIsMobileView(false);
-        setIsDropdownOpen(false);
-        setIsMenuOpen(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isMobileView]);
 
   const handleLogoClick = () => {
     window.location.href = 'https://www.ucsc.edu/';
@@ -38,10 +19,6 @@ const TopNavbar = () => {
   const handleSettingsClick = () => {
     navigate('/settings');
   };
-
-  const handleSignInClick = () => {
-    navigate('/signin');
-  }
 
   const handleLogout = async () => {
     try {

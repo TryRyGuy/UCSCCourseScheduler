@@ -5,7 +5,7 @@ const classInfoSchema = new mongoose.Schema({
         type: String,
     },
     classTag: {
-        type: String,
+        type: Number,
     },
     sectionNumber: {
         type: String,

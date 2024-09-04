@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import loginBackground from '/images/LoginBackground.png';
 import axios from 'axios'; // Make sure axios is installed and imported
 import { useSession } from '../../components/SessionContext.jsx';
@@ -14,13 +14,16 @@ const LoginPage = () => {
   const [message2, setMessage2] = useState('');
   
    // Get the CSRF token and user-related functions from the SessionContext
-  const { csrfToken, setUser, isTabletOrMobile } = useSession();
+  const { csrfToken, setUser, isTabletOrMobile, user, loading } = useSession();
 
   // Swaps between Login versus Sign Up side of the form
   const toggleActive = () => {
     setIsLoginActive(!isLoginActive);
     document.activeElement.blur();
   };
+
+  // USE EFFECT THAT IF A USER IS SIGNED IN, REDIRECT TO THE HOME PAGE ------------------------------
+  // Checkbox to extend user login time (stay signed in)
 
   // Toggles user's ability to see their entered password
   const togglePasswordVisibility = () => {

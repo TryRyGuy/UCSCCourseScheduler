@@ -56,12 +56,12 @@ router.post('/addClass', async (req, res) => {
         // Check if the class is already in the schedule
         const isDuplicate = schedule.classes.some((entry) => entry.classId.toString() === classId);
         if (isDuplicate) {
-            return res.status(400).json({ message: 'Class already exists in the schedule' });
+            return res.status(400).json({ message: 'Class already exists in this schedule' });
         }
 
         // Check if the schedule already has 15 classes
         if (schedule.classes.length >= 15) {
-            return res.status(400).json({ message: 'Schedule is full. Cannot add more classes. Please empty some of your cart and try again' });
+            return res.status(400).json({ message: 'Schedule is full (limit 15). Cannot add more classes. Please empty some of your cart and try again' });
         }
 
         // Add the new class to the schedule

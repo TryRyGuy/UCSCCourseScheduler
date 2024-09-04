@@ -16,13 +16,15 @@ router.get('/fetchClasses', async (req, res) => {
     if (department) filter.dept = department;
     if (instructor) filter.instructor = { $regex: new RegExp(instructor, 'i') }; // Case-insensitive search
 
+    const classTagNumber = Number(classTag);
+    console.log(typeof(classTagNumber));
     if (classTag) {
         if (comparison == 0) {
-            filter.classTag = { $lt: classTag };
+            filter.classTag = { $lt: classTagNumber };
         } else if (comparison == 1) {
-            filter.classTag = classTag;
+            filter.classTag = classTagNumber;
         } else if (comparison == 2) {
-            filter.classTag = { $gt: classTag };
+            filter.classTag = { $gt: classTagNumber };
         }
     }
 
@@ -34,7 +36,8 @@ router.get('/fetchClasses', async (req, res) => {
         // Calculate total pages needed
         const totalPages = Math.ceil(totalClasses / limit);
 
-        const classes = await ClassInfo.find(filter)
+        //.sort({ classTag: 1})
+        const classes = await ClassInfo.find(filter).sort({ classTag: 1});
 
         // Return both classes and totalPages
         res.status(200).json({ classes, totalPages });
