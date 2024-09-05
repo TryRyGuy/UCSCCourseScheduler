@@ -11,7 +11,7 @@ const LandingPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start px-6 pt-4 pb-12"> {/* Reduced top padding further */}
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-start px-6 pt-4 pb-12"> {/* Reduced top padding further */}
       <div className="text-center max-w-2xl mt-2"> {/* Added margin-top to control spacing */}
         <img
           src="/images/SchoolLogo.png"
