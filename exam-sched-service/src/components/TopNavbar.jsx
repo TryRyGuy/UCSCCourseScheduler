@@ -23,7 +23,7 @@ const TopNavbar = () => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        'http://localhost:5000/api/users/logout',
+        '/api/users/logout',
         {},
         {
           withCredentials: true,

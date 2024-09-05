@@ -33,7 +33,7 @@ const LoginPage = () => {
   const handleLogin = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/users/login',
+        '/api/users/login',
         { email, password },
         {
           withCredentials: true,
@@ -60,7 +60,7 @@ const LoginPage = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/users/register',
+        '/api/users/register',
         { email, password },
         {
           withCredentials: true,

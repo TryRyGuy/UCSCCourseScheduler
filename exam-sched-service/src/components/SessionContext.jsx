@@ -52,7 +52,7 @@ export const SessionProvider = ({ children }) => {
 
     const fetchCsrfToken = async () => {
         try {
-            const csrfResponse = await axios.get('http://localhost:5000/api/csrf-token', { withCredentials: true });
+            const csrfResponse = await axios.get('/api/csrf-token', { withCredentials: true });
             setCsrfToken(csrfResponse.data.csrfToken);
         } catch (error) {
             console.error('Error fetching CSRF token:', error);

@@ -12,7 +12,7 @@ const TwoFVerifyPage = () => {
   const handleVerification = async () => {
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/users/verify-email',
+        '/api/users/verify-email',
         { verificationCode },
         {
           withCredentials: true,
