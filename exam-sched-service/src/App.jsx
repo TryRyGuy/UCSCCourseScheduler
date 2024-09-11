@@ -18,7 +18,7 @@ const App = () => {
       <div className="relative h-screen w-screen flex flex-col">
         <TopNavbar />
         <SideNavbar />
-        <main className="flex-1 pt-20 flex items-center justify-center">
+        <main className="flex-1 pt-12 flex items-center justify-center">
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/signin" element={<LoginPage />} />

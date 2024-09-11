@@ -21,7 +21,8 @@ app.use(cookieParser());  // Use cookie-parser
 
 // CORS configuration
 app.use(cors({
-    origin: 'http://localhost:3000', // Adjust if your frontend is served from a different URL
+    // 'http://localhost' will be the domain for S3 Bucket serving our frontend
+    origin: 'http://localhost', // Adjust if your frontend is served from a different URL
     methods: ['GET', 'POST'],
     credentials: true
 }));

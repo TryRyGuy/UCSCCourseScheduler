@@ -10,6 +10,9 @@ export const SessionProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [csrfToken, setCsrfToken] = useState('');
     const [loading, setLoading] = useState(true);
+    const [isTabletOrMobile, setIsTabletOrMobile] = useState(window.innerWidth < 1024);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [isSmall, setIsSmall] = useState(window.innerWidth < 640);
 
     // Variables for the User's schedules and their classCounts (Lists of the actual classes)
     const [schedules, setSchedules] = useState({ 
@@ -49,7 +52,7 @@ export const SessionProvider = ({ children }) => {
 
     const fetchCsrfToken = async () => {
         try {
-            const csrfResponse = await axios.get('http://localhost:5000/api/csrf-token', { withCredentials: true });
+            const csrfResponse = await axios.get('/api/csrf-token', { withCredentials: true });
             setCsrfToken(csrfResponse.data.csrfToken);
         } catch (error) {
             console.error('Error fetching CSRF token:', error);
@@ -62,6 +65,18 @@ export const SessionProvider = ({ children }) => {
         fetchSession();
     }, []);
 
+    // Check for window resize events that would indicate most touchscreen/mobile devices or small windows
+    useEffect(() => {
+        const handleResize = () => {
+          setIsTabletOrMobile(window.innerWidth < 1024);
+          setIsMobile(window.innerWidth < 768);
+          setIsSmall(window.innerWidth < 640)
+        };
+    
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
+
     useEffect(() => {
         console.log('Schedules updated:', schedules);
         console.log('Class counts updated:', classCounts);
@@ -69,7 +84,19 @@ export const SessionProvider = ({ children }) => {
     
     useEffect
     return (
-        <SessionContext.Provider value={{ user, setUser, csrfToken, loading, schedules, setSchedules, classCounts, setClassCounts  }}>
+        <SessionContext.Provider value={{ 
+            user, 
+            setUser, 
+            csrfToken, 
+            loading, 
+            schedules, 
+            setSchedules, 
+            classCounts, 
+            setClassCounts, 
+            isTabletOrMobile, 
+            isMobile,
+            isSmall
+        }}>
             {children}
         </SessionContext.Provider>
     );

@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const classInfoSchema = new mongoose.Schema({
-    classTag: {
+    dept: {
         type: String,
+    },
+    classTag: {
+        type: Number,
     },
     sectionNumber: {
         type: String,
